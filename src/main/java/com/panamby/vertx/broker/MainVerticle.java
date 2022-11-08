@@ -1,6 +1,7 @@
 package com.panamby.vertx.broker;
 
 import com.panamby.vertx.broker.assets.AssetsRestApi;
+import com.panamby.vertx.broker.quotes.QuotesRestApi;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
@@ -35,6 +36,7 @@ public static void main(String[] args) {
 	  final Router restApi = Router.router(vertx);
 	  restApi.route().failureHandler(handleFailure());
 	  AssetsRestApi.attach(restApi);
+	  QuotesRestApi.attach(restApi);
 	  
 	    vertx.createHttpServer()
 	    .requestHandler(restApi)

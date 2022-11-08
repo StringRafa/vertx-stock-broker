@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainVerticle extends AbstractVerticle {
 
-  public static void main(String[] args) {
+  public static final int PORT = 8888;
+
+public static void main(String[] args) {
 	  var vertx = Vertx.vertx();
 	  vertx.exceptionHandler( error -> 
 		 log.error("Unhandled: {}", error)
@@ -37,7 +39,7 @@ public class MainVerticle extends AbstractVerticle {
 	    vertx.createHttpServer()
 	    .requestHandler(restApi)
 	    .exceptionHandler(error -> log.error("HTTP Server error: ", error))
-	    .listen(8888, http -> {
+	    .listen(PORT, http -> {
 	      if (http.succeeded()) {
 	        startPromise.complete();
 	        log.info("HTTP server started on port 8888");

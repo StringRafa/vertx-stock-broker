@@ -38,6 +38,7 @@ public class TestAssetsRestApi {
 	  	    assertEquals("[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"},{\"name\":\"FB\"},{\"name\":\"MSFT\"},{\"name\":\"GOOG\"}]", json.encode());
 	  	    assertEquals(200, response.statusCode());
 	  	    assertEquals(HttpHeaderValues.APPLICATION_JSON.toString(), response.getHeader(HttpHeaders.CONTENT_TYPE.toString()));
+	  	    assertEquals("my-value", response.getHeader("my-header"));
 	  	    context.completeNow();
 	  	}));
   }

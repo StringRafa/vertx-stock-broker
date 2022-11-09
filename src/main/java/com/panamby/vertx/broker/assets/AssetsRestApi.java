@@ -19,9 +19,9 @@ public class AssetsRestApi {
 			final JsonArray response = new JsonArray();
 			ASSETS.stream().map(Asset::new).forEach(response::add);
 			log.info("Path {} responds with {}", context.normalizedPath(), response.encode());
-			context
-				.response()
+			context.response()
 				.putHeader(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON)
+				.putHeader("my-header", "my-value")
 				.end(response.toBuffer());
 		});
 	}

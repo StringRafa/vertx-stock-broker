@@ -2,6 +2,7 @@ package com.panamby.vertx.broker;
 
 import com.panamby.vertx.broker.assets.AssetsRestApi;
 import com.panamby.vertx.broker.quotes.QuotesRestApi;
+import com.panamby.vertx.broker.watchlist.WatchListRestApi;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Handler;
@@ -10,6 +11,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.handler.BodyHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,7 +19,7 @@ public class MainVerticle extends AbstractVerticle {
 
   public static final int PORT = 8888;
 
-public static void main(String[] args) {
+  public static void main(String[] args) {
 	  var vertx = Vertx.vertx();
 	  vertx.exceptionHandler( error -> 
 		 log.error("Unhandled: {}", error)
@@ -34,9 +36,12 @@ public static void main(String[] args) {
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
 	  final Router restApi = Router.router(vertx);
-	  restApi.route().failureHandler(handleFailure());
+	  restApi.route()
+	  	.handler(BodyHandler.create())
+	  	.failureHandler(handleFailure());
 	  AssetsRestApi.attach(restApi);
 	  QuotesRestApi.attach(restApi);
+	  WatchListRestApi.attach(restApi);
 	  
 	    vertx.createHttpServer()
 	    .requestHandler(restApi)
@@ -51,7 +56,7 @@ public static void main(String[] args) {
 	    });
   }
 
-private Handler<RoutingContext> handleFailure() {
+  private Handler<RoutingContext> handleFailure() {
 	return errorContext -> {
 		  if(errorContext.response().ended()) {
 			  // Ignore completed response

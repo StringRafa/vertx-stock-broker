@@ -8,7 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.panamby.vertx.broker.MainVerticle;
 
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.json.JsonArray;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
@@ -35,6 +37,7 @@ public class TestAssetsRestApi {
 	  	    log.info("Response: {}", json);
 	  	    assertEquals("[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"},{\"name\":\"FB\"},{\"name\":\"MSFT\"},{\"name\":\"GOOG\"}]", json.encode());
 	  	    assertEquals(200, response.statusCode());
+	  	    assertEquals(HttpHeaderValues.APPLICATION_JSON.toString(), response.getHeader(HttpHeaders.CONTENT_TYPE.toString()));
 	  	    context.completeNow();
 	  	}));
   }

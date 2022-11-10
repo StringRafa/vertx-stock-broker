@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ConfigLoader {
 	
+	private static final String CONFIG_FILE = "application.yml";
 	public static final String SERVER_PORT = "SERVER_PORT";
 	static final List<String> EXPOSED_ENVIRONMENT_VARIABLES = Arrays.asList(SERVER_PORT);
 
@@ -32,9 +33,15 @@ public class ConfigLoader {
 				.setType("sys")
 				.setConfig(new JsonObject().put("cache", false));
 		
+		var yamlStore = new ConfigStoreOptions()
+				.setType("file")
+				.setFormat("yaml")
+				.setConfig(new JsonObject().put("path", CONFIG_FILE));
+		
 		var retriever = ConfigRetriever.create(vertx,
 				new ConfigRetrieverOptions()
 				// Order defines overload rules
+					.addStore(yamlStore)
 					.addStore(propertyStore)
 					.addStore(envStore)
 		);

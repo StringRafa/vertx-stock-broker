@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.panamby.vertx.broker.MainVerticle;
+import com.panamby.vertx.broker.config.ConfigLoader;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.Vertx;
@@ -24,6 +25,7 @@ public class TestAssetsRestApi {
 
   @BeforeEach
   void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
+	System.setProperty(ConfigLoader.SERVER_PORT, "8888");
     vertx.deployVerticle(new MainVerticle(), testContext.succeeding(id -> testContext.completeNow()));
   }
 

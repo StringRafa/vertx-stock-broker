@@ -1,5 +1,7 @@
 package com.panamby.vertx.broker;
 
+import com.panamby.vertx.broker.config.ConfigLoader;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
@@ -12,6 +14,7 @@ public class MainVerticle extends AbstractVerticle {
 	public static final int PORT = 8888;
 
 	public static void main(String[] args) {
+//		System.setProperty(ConfigLoader.SERVER_PORT, "8888");
 		var vertx = Vertx.vertx();
 		vertx.exceptionHandler(error -> 
 			log.error("Unhandled: {}", error));

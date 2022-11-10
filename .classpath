@@ -36,6 +36,12 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Rafael/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-junit5/4.3.4/444160259fdc7f64bf7fee2b5434f0eb60087710/vertx-junit5-4.3.4.jar" sourcepath="C:/Users/Rafael/.gradle/caches/modules-2/files-2.1/io.vertx/vertx-junit5/4.3.4/889f5e70ee2537100fa4dac9bd422abf08280b9d/vertx-junit5-4.3.4-sources.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="test"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
 		<attributes>
 			<attribute name="optional" value="true"/>

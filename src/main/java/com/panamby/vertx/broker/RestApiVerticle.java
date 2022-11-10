@@ -1,6 +1,8 @@
 package com.panamby.vertx.broker;
 
 import com.panamby.vertx.broker.assets.AssetsRestApi;
+import com.panamby.vertx.broker.config.BrokerConfig;
+import com.panamby.vertx.broker.config.ConfigLoader;
 import com.panamby.vertx.broker.quotes.QuotesRestApi;
 import com.panamby.vertx.broker.watchlist.WatchListRestApi;
 
@@ -17,11 +19,17 @@ import lombok.extern.slf4j.Slf4j;
 public class RestApiVerticle extends AbstractVerticle {
 
 	@Override
-	public void start(final Promise<Void> startPromise) throws Exception {		
-		startHttpServerAndAttachRoutes(startPromise);
+	public void start(final Promise<Void> startPromise) throws Exception {	
+		
+		ConfigLoader.load(vertx)
+			.onFailure(startPromise::fail)
+			.onSuccess(configuration -> {
+				log.info("Retrieved Configuration: {}", configuration);
+				startHttpServerAndAttachRoutes(startPromise, configuration);
+			});		
 	}
 	
-	private void startHttpServerAndAttachRoutes(Promise<Void> startPromise) {
+	private void startHttpServerAndAttachRoutes(Promise<Void> startPromise, final BrokerConfig configuration) {
 		final Router restApi = Router.router(vertx);
 		  restApi.route()
 		  	.handler(BodyHandler.create())
@@ -33,10 +41,10 @@ public class RestApiVerticle extends AbstractVerticle {
 		    vertx.createHttpServer()
 		    .requestHandler(restApi)
 		    .exceptionHandler(error -> log.error("HTTP Server error: ", error))
-		    .listen(MainVerticle.PORT, http -> {
+		    .listen(configuration.getServerPort(), http -> {
 		      if (http.succeeded()) {
 		        startPromise.complete();
-		        log.info("HTTP server started on port 8888");
+		        log.info("HTTP server started on port {}", configuration.getServerPort());
 		      } else {
 		        startPromise.fail(http.cause());
 		      }

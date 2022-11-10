@@ -14,6 +14,7 @@ public class BrokerConfig {
 
 	int serverPort;
 	String version;
+	DbConfig dbConfig;
 	
 	public static BrokerConfig from(final JsonObject config) {
 		final Integer serverPort = config.getInteger(ConfigLoader.SERVER_PORT);
@@ -27,6 +28,7 @@ public class BrokerConfig {
 		return BrokerConfig.builder()
 				.serverPort(serverPort)
 				.version(version)
+				.dbConfig(new DbConfig())
 				.build();
 	}
 }

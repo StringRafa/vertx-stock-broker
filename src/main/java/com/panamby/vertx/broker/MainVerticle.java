@@ -1,5 +1,8 @@
 package com.panamby.vertx.broker;
 
+import com.panamby.vertx.broker.config.ConfigLoader;
+import com.panamby.vertx.broker.db.migration.FlywayMigration;
+
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
@@ -27,7 +30,17 @@ public class MainVerticle extends AbstractVerticle {
 		vertx.deployVerticle(VersionInfoVerticle.class.getName())
 				.onFailure(startPromise::fail)
 				.onSuccess(id -> log.info("Deployed {} with id {}", VersionInfoVerticle.class.getSimpleName(), id))
+				.compose(next -> migrateDataBase())
+				.onFailure(startPromise::fail)
+				.onSuccess(id -> log.info("Migrated db schema to lastest version!"))
 				.compose(next -> deployRestApiVerticle(startPromise));		
+	}
+	
+	private Future<Void> migrateDataBase() {
+		return ConfigLoader.load(vertx)
+		.compose(config -> {
+			return FlywayMigration.migrate(vertx, config.getDbConfig());
+		});
 	}
 
 	private Future<String> deployRestApiVerticle(Promise<Void> startPromise) {

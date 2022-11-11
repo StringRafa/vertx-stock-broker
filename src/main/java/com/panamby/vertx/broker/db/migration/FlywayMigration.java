@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FlywayMigration {
 
 	public static Future<Void> migrate(Vertx vertx, DbConfig dbConfig) {
-		
+		log.debug("DB Config: {}", dbConfig);
 		return  vertx.<Void>executeBlocking(promise -> {
 			// Flyway migration is bloking => uses JDBC
 			execute(dbConfig);
